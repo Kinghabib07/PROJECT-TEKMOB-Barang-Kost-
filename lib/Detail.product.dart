@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'cart_page.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final String productName;
@@ -147,9 +148,10 @@ class ProductDetailPage extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Fitur pembelian belum tersedia'),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => CartPage(products: [productName]),
                   ),
                 );
               },
