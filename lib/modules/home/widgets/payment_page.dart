@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PaymentPage extends StatefulWidget {
-  final List<Map<String, String>> products;
+  final List<Map<String, dynamic>> products;
   const PaymentPage({super.key, required this.products});
 
   @override
@@ -71,10 +71,20 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     int total = 0;
     for (var p in widget.products) {
-      total += int.tryParse(p['price']?.replaceAll('.', '') ?? '0') ?? 0;
+    final dynamic price = p['price'];
+
+    if (price is int) {
+      total += price;
+    } else if (price is double) {
+      total += price.toInt();
+    } else if (price is String) {
+      total += int.tryParse(price.replaceAll('.', '')) ?? 0;
     }
+  }
+
     int shipping = 5000;
     int grandTotal = total + shipping;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout'),
@@ -92,23 +102,13 @@ class _PaymentPageState extends State<PaymentPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              const Text(
-                'Alamat Pengiriman',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                ),
-              ),
+              const Text('Alamat Pengiriman', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 13)),
               const SizedBox(height: 6),
               GestureDetector(
                 onTap: _editAddress,
                 child: Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -132,35 +132,22 @@ class _PaymentPageState extends State<PaymentPage> {
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                child: const Row(
                   children: [
-                    const Icon(Icons.add, size: 18, color: Colors.grey),
-                    const SizedBox(width: 8),
-                    const Text('Tambahkan alamat pengiriman', style: TextStyle(color: Colors.grey)),
+                    Icon(Icons.add, size: 18, color: Colors.grey),
+                    SizedBox(width: 8),
+                    Text('Tambahkan alamat pengiriman', style: TextStyle(color: Colors.grey)),
                   ],
                 ),
               ),
               const SizedBox(height: 18),
-              const Text(
-                'Metode Pengiriman',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                ),
-              ),
+              const Text('Metode Pengiriman', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 13)),
               const SizedBox(height: 6),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
                 child: Row(
                   children: [
                     Image.asset('assets/gojek.png', width: 24, height: 24, errorBuilder: (c, e, s) => const Icon(Icons.local_shipping)),
@@ -174,22 +161,12 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
               ),
               const SizedBox(height: 18),
-              const Text(
-                'Metode pembayaran',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                ),
-              ),
+              const Text('Metode pembayaran', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 13)),
               const SizedBox(height: 6),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
                 child: Row(
                   children: [
                     Icon(Icons.radio_button_checked, color: Colors.blue[700]),
@@ -211,11 +188,11 @@ class _PaymentPageState extends State<PaymentPage> {
                 ],
               ),
               const SizedBox(height: 4),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Biaya Pengiriman', style: TextStyle(color: Colors.grey)),
-                  const Text('Rp5000', style: TextStyle(color: Color(0xFFFD7E14))),
+                  Text('Biaya Pengiriman', style: TextStyle(color: Colors.grey)),
+                  Text('Rp5000', style: TextStyle(color: Color(0xFFFD7E14))),
                 ],
               ),
               const SizedBox(height: 4),

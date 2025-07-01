@@ -10,5 +10,11 @@
     "email": "anak.kos2@email.com",
     "password": "abcdef",
     "name": "Sari Anak Kos"
+  },
+   {
+    "id": 3,
+    "email": "coba@gmail.com",
+    "password": "1",
+    "name": "paull Anak Kos"
   }
 ]

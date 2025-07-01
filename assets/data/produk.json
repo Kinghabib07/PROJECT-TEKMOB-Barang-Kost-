@@ -1,0 +1,162 @@
+[
+  {
+    "nama": "Kaos Oversize Polos",
+    "kategori": "Atasan",
+    "harga": 45000,
+    "ukuran": ["S", "M", "L"],
+    "stok": 20,
+    "gambar": "https://berducdn.com/img/800/bsoai4w7bsoau5pwec_2/CTVrrYM7SIEPHSeCTVzYopgRRTzU41Q6mluOrH3S97ow.jpg"
+  },
+  {
+    "nama": "Kemeja Flanel Pria",
+    "kategori": "Atasan",
+    "harga": 85000,
+    "ukuran": ["M", "L", "XL"],
+    "stok": 15,
+    "gambar": "https://down-id.img.susercontent.com/file/38b8f5ba0335c515259a83c9ddb93fec"
+  },
+  {
+    "nama": "Blouse Wanita Lengan Panjang",
+    "kategori": "Atasan",
+    "harga": 65000,
+    "ukuran": ["S", "M", "L"],
+    "stok": 12,
+    "gambar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsqgZRhBuRvqMWNpUE4jt1VR39QC99c-M4mA&s"
+  },
+  {
+    "nama": "Celana Jeans Skinny",
+    "kategori": "Bawahan",
+    "harga": 120000,
+    "ukuran": ["28", "30", "32"],
+    "stok": 10,
+    "gambar": "https://americantall.com/products/skinny-high-rise-tall-women-jean-monaco-faded"
+  },
+  {
+    "nama": "Celana Kulot Polos",
+    "kategori": "Bawahan",
+    "harga": 75000,
+    "ukuran": ["M", "L"],
+    "stok": 18,
+    "gambar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz6V0jveUodokYuYoM0P9pcbxI1Jg4i0f_PQ&s"
+  },
+  {
+    "nama": "Rok Plisket Midi",
+    "kategori": "Bawahan",
+    "harga": 68000,
+    "ukuran": ["All Size"],
+    "stok": 9,
+    "gambar": "https://down-id.img.susercontent.com/file/863902005268902bd34015a0ef705d4b"
+  },
+  {
+    "nama": "Hoodie Zipper Unisex",
+    "kategori": "Outerwear",
+    "harga": 140000,
+    "ukuran": ["M", "L", "XL"],
+    "stok": 25,
+    "gambar": "https://images.tokopedia.net/img/cache/700/VqbcmM/2024/5/7/a257b322-2fe7-48a2-b9bf-4279c648cf3f.jpg"
+  },
+  {
+    "nama": "Jaket Bomber Pria",
+    "kategori": "Outerwear",
+    "harga": 165000,
+    "ukuran": ["L", "XL"],
+    "stok": 8,
+    "gambar": "https://i.ibb.co/mv3MJ3T/jaket-bomber.jpg"
+  },
+  {
+    "nama": "Cardigan Rajut Wanita",
+    "kategori": "Outerwear",
+    "harga": 90000,
+    "ukuran": ["All Size"],
+    "stok": 11,
+    "gambar": "https://i.ibb.co/WKRmPSf/cardigan.jpg"
+  },
+  {
+    "nama": "Dress Panjang Floral",
+    "kategori": "Dress",
+    "harga": 135000,
+    "ukuran": ["S", "M", "L"],
+    "stok": 6,
+    "gambar": "https://i.ibb.co/0GfPQZx/dress-floral.jpg"
+  },
+  {
+    "nama": "Mini Dress Sabuk Hitam",
+    "kategori": "Dress",
+    "harga": 110000,
+    "ukuran": ["S", "M"],
+    "stok": 10,
+    "gambar": "https://i.ibb.co/sF6xfVD/mini-dress.jpg"
+  },
+  {
+    "nama": "Sepatu Sneakers Putih",
+    "kategori": "Sepatu",
+    "harga": 190000,
+    "ukuran": ["38", "39", "40", "41"],
+    "stok": 14,
+    "gambar": "https://i.ibb.co/1QcNwcp/sneakers.jpg"
+  },
+  {
+    "nama": "Sandal Slide Wanita",
+    "kategori": "Sepatu",
+    "harga": 58000,
+    "ukuran": ["36", "37", "38"],
+    "stok": 20,
+    "gambar": "https://i.ibb.co/qnBYRDx/sandal.jpg"
+  },
+  {
+    "nama": "Topi Bucket Polos",
+    "kategori": "Aksesoris",
+    "harga": 30000,
+    "ukuran": ["All Size"],
+    "stok": 30,
+    "gambar": "https://i.ibb.co/J3CWkSg/bucket-hat.jpg"
+  },
+  {
+    "nama": "Jam Tangan Fashion Wanita",
+    "kategori": "Aksesoris",
+    "harga": 99000,
+    "ukuran": ["All Size"],
+    "stok": 7,
+    "gambar": "https://i.ibb.co/WVvywv7/jam-wanita.jpg"
+  },
+  {
+    "nama": "Ikat Pinggang Kulit",
+    "kategori": "Aksesoris",
+    "harga": 45000,
+    "ukuran": ["M", "L"],
+    "stok": 13,
+    "gambar": "https://i.ibb.co/4NqL7Ch/ikat-pinggang.jpg"
+  },
+  {
+    "nama": "Baju Muslim Pria Koko Bordir",
+    "kategori": "Atasan",
+    "harga": 99000,
+    "ukuran": ["M", "L", "XL"],
+    "stok": 10,
+    "gambar": "https://i.ibb.co/k4LPq0r/koko.jpg"
+  },
+  {
+    "nama": "Mukena Katun Rayon",
+    "kategori": "Dress",
+    "harga": 120000,
+    "ukuran": ["All Size"],
+    "stok": 5,
+    "gambar": "https://i.ibb.co/KDpgnrb/mukena.jpg"
+  },
+  {
+    "nama": "Celana Training Olahraga",
+    "kategori": "Bawahan",
+    "harga": 68000,
+    "ukuran": ["M", "L", "XL"],
+    "stok": 16,
+    "gambar": "https://i.ibb.co/DpPYzWk/celana-training.jpg"
+  },
+  {
+    "nama": "Kaos Polo Lengan Pendek",
+    "kategori": "Atasan",
+    "harga": 72000,
+    "ukuran": ["M", "L"],
+    "stok": 22,
+    "gambar": "https://i.ibb.co/zV1Lcx0/kaos-polo.jpg"
+  }
+]
