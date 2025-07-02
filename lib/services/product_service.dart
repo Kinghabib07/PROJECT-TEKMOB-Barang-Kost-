@@ -1,99 +1,72 @@
-// lib/services/product_service.dart
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ProductService {
-  // Ganti dengan base URL Platzi Fake Store API untuk produk
-  final String _baseUrl = 'https://api.escuelajs.co/api/v1/products';
-  final String _categoriesUrl = 'https://api.escuelajs.co/api/v1/categories';
+  // URL API
+  final String _baseUrl = 'https://fakestoreapi.com/products';
 
-  /// Ambil semua produk dari Platzi Fake Store API
-  /// Mendukung pagination (limit dan offset)
-  /// Default: limit 20, offset 0
-  Future<List<dynamic>> fetchAllProducts({int limit = 1000, int offset = 0}) async {
+  // Fungsi untuk mengambil semua produk dari API
+  Future<List<dynamic>> fetchAllProducts() async {
     try {
-      final response = await http.get(Uri.parse('$_baseUrl?limit=$limit&offset=$offset'));
+      // Kirim permintaan GET ke API
+      final response = await http.get(Uri.parse(_baseUrl));
 
       if (response.statusCode == 200) {
+        // Decode JSON menjadi List
         final List<dynamic> data = json.decode(response.body);
-        return data; // Platzi API langsung mengembalikan list produk
+        // Bersihkan setiap data produk
+        return data.map((product) => _cleanProductData(product)).toList();
       } else {
-        throw Exception('Gagal memuat produk dari API. Status code: ${response.statusCode}');
+        throw Exception('Gagal mengambil data produk. Kode error: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Gagal terhubung ke Platzi Fake Store API: $e');
+      throw Exception('Tidak bisa terhubung ke server: $e');
     }
   }
 
-  /// Ambil produk berdasarkan ID kategori
-  /// [categoryId] : ID kategori produk yang ingin diambil
-  /// Mendukung pagination (limit dan offset)
-  Future<List<dynamic>> fetchProductsByCategory(int categoryId, {int limit = 1000, int offset = 0}) async {
-    try {
-      // Platzi API: 'products' endpoint juga bisa difilter berdasarkan 'categoryId'
-      final response = await http.get(Uri.parse('$_baseUrl/?categoryId=$categoryId&limit=$limit&offset=$offset'));
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        return data;
-      } else {
-        throw Exception('Gagal memuat produk berdasarkan kategori dari API. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Gagal terhubung ke Platzi Fake Store API berdasarkan kategori: $e');
-    }
-  }
-
-  /// Ambil detail produk berdasarkan ID dari Platzi Fake Store API
-  /// [id] : ID produk yang ingin diambil
+  // Fungsi untuk mengambil detail produk berdasarkan ID dari API
   Future<Map<String, dynamic>> fetchProductDetail(int id) async {
     try {
+      // Kirim permintaan GET ke API untuk produk tertentu
       final response = await http.get(Uri.parse('$_baseUrl/$id'));
 
       if (response.statusCode == 200) {
+        // Decode JSON menjadi Map
         final Map<String, dynamic> data = json.decode(response.body);
-        return data; // Langsung mengembalikan objek produk
+        // Bersihkan data produk
+        return _cleanProductData(data);
       } else {
-        throw Exception('Gagal memuat detail produk dari API. Status code: ${response.statusCode}');
+        throw Exception('Gagal mengambil detail produk. Kode error: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Gagal terhubung ke Platzi Fake Store API untuk detail produk: $e');
+      throw Exception('Tidak bisa terhubung ke server: $e');
     }
   }
 
-  /// Ambil semua kategori dari Platzi Fake Store API
-  Future<List<dynamic>> fetchAllCategories() async {
-    try {
-      final response = await http.get(Uri.parse(_categoriesUrl));
+  // Fungsi untuk membersihkan dan memvalidasi data produk
+  Map<String, dynamic> _cleanProductData(Map<String, dynamic> product) {
+    // Ambil gambar dari key 'image' (sesuai struktur API Fake Store)
+    String image = product['image'] ?? 'https://via.placeholder.com/300';
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        return data;
-      } else {
-        throw Exception('Gagal memuat kategori dari API. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Gagal terhubung ke Platzi Fake Store API untuk kategori: $e');
+    // Safely handle price conversion
+    dynamic rawPrice = product['price'];
+    double price = 0.0;
+    
+    if (rawPrice is double) {
+      price = rawPrice;
+    } else if (rawPrice is int) {
+      price = rawPrice.toDouble();
+    } else if (rawPrice is String) {
+      price = double.tryParse(rawPrice) ?? 0.0;
     }
-  }
 
-  /// Mencari produk berdasarkan judul (nama)
-  /// [title] : Kata kunci pencarian judul produk
-  /// [limit] : Jumlah produk yang ingin diambil per halaman
-  /// [offset] : Jumlah produk yang ingin dilewati (offset)
-  Future<List<dynamic>> searchProductsByTitle(String title, {int limit = 1000, int offset = 0}) async {
-    try {
-      final response = await http.get(Uri.parse('$_baseUrl?title=$title&limit=$limit&offset=$offset'));
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        return data;
-      } else {
-        throw Exception('Gagal mencari produk dari API. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Gagal terhubung ke Platzi Fake Store API untuk pencarian: $e');
-    }
+    return {
+      'id': product['id'] ?? 0,
+      'nama': (product['title'] ?? 'Produk Tanpa Nama').toString(),
+      'kategori': (product['category'] ?? 'Tidak ada kategori').toString(),
+      'harga': price,
+      'deskripsi': (product['description'] ?? 'Tidak ada deskripsi').toString(),
+      'gambar': image,
+    };
   }
 }

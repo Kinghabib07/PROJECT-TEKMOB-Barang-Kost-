@@ -1,30 +1,61 @@
 import 'package:flutter/material.dart';
-import 'cart_storage.dart';
+import '../../../services/cart_service.dart';
+import 'cart_item_widget.dart';
 import 'payment_page.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({super.key, required List products});
+  const CartPage({super.key});
 
   @override
   State<CartPage> createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
-  List<bool> checked = [];
+  late CartService _cartService;
 
   @override
   void initState() {
     super.initState();
-    checked = List.generate(CartStorage.cartItems.length, (_) => false);
+    _cartService = CartService();
+    _cartService.addListener(_onCartChanged);
   }
 
-  int _parsePrice(dynamic price) {
-    if (price is int) return price;
-    if (price is double) return price.toInt();
-    if (price is String) {
-      return int.tryParse(price.replaceAll('.', '')) ?? 0;
+  @override
+  void dispose() {
+    _cartService.removeListener(_onCartChanged);
+    super.dispose();
+  }
+
+  void _onCartChanged() {
+    if (mounted) {
+      setState(() {});
     }
-    return 0;
+  }
+
+  void _showRemoveConfirmation(BuildContext context, String productId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Hapus Produk'),
+          content: const Text('Apakah Anda yakin ingin menghapus produk ini dari keranjang?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Batal'),
+            ),
+            TextButton(
+              onPressed: () {
+                _cartService.removeFromCart(productId);
+                Navigator.of(context).pop();
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: const Text('Hapus'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   String _formatPrice(int price) {
@@ -34,16 +65,10 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    final products = CartStorage.cartItems;
+    final products = _cartService.cartItems;
     final bool hasProducts = products.isNotEmpty;
-    final bool hasChecked = checked.contains(true);
-
-    int total = 0;
-    for (int i = 0; i < products.length; i++) {
-      if (checked[i]) {
-        total += _parsePrice(products[i]['price']);
-      }
-    }
+    final bool hasChecked = _cartService.selectedItemCount > 0;
+    final int total = _cartService.getTotalPrice();
 
     return Scaffold(
       appBar: AppBar(
@@ -72,87 +97,18 @@ class _CartPageState extends State<CartPage> {
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       final product = products[index];
-                      final String title = product['title'] ?? 'Tanpa Nama';
-                      final int price = _parsePrice(product['price']);
-                      final String image = (product['images'] is List && product['images'].isNotEmpty)
-                          ? product['images'][0]
-                          : 'https://via.placeholder.com/150';
+                      final productId = product['id']?.toString() ?? index.toString();
+                      final isChecked = _cartService.checkedItems[productId] ?? true;
 
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
-                          ],
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                bottomLeft: Radius.circular(12),
-                              ),
-                              child: Image.network(
-                                image,
-                                width: 80,
-                                height: 80,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    const Icon(Icons.image_not_supported, size: 40),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            title,
-                                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              checked[index] = !checked[index];
-                                            });
-                                          },
-                                          child: Container(
-                                            width: 24,
-                                            height: 24,
-                                            decoration: BoxDecoration(
-                                              color: checked[index]
-                                                  ? const Color(0xFF843B3B)
-                                                  : Colors.grey[300],
-                                              borderRadius: BorderRadius.circular(6),
-                                            ),
-                                            child: checked[index]
-                                                ? const Icon(Icons.check, color: Colors.white, size: 18)
-                                                : null,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text('Pilihan', style: TextStyle(color: Colors.grey[600], fontSize: 11)),
-                                    const SizedBox(height: 4),
-                                    Text('Rp${_formatPrice(price)}',
-                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      return CartItemWidget(
+                        product: product,
+                        isChecked: isChecked,
+                        onToggleCheck: () {
+                          _cartService.toggleItemCheck(productId);
+                        },
+                        onRemove: () {
+                          _showRemoveConfirmation(context, productId);
+                        },
                       );
                     },
                   ),
@@ -175,17 +131,12 @@ class _CartPageState extends State<CartPage> {
                       ElevatedButton(
                         onPressed: hasChecked
                             ? () {
-                                final selected = <Map<String, dynamic>>[];
-                                for (int i = 0; i < products.length; i++) {
-                                  if (checked[i]) {
-                                    selected.add(products[i]);
-                                  }
-                                }
-                                if (selected.isNotEmpty) {
+                                final selectedProducts = _cartService.getSelectedItems();
+                                if (selectedProducts.isNotEmpty) {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => PaymentPage(products: selected),
+                                      builder: (_) => PaymentPage(products: selectedProducts),
                                     ),
                                   );
                                 }

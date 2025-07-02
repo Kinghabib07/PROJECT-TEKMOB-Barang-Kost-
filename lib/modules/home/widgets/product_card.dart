@@ -34,18 +34,41 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: 160,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                image: DecorationImage(
-                  image: NetworkImage(imagePath),
-                  fit: BoxFit.cover,
-                  onError: (error, stackTrace) {},
-                ),
-              ),
+  Container(
+  height: 160,
+  width: double.infinity,
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(8),
+    color: Colors.grey[200], // Warna background untuk placeholder
+  ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(8),
+    child: imagePath.isNotEmpty
+        ? Image.network(
+            imagePath,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => Container(
+              color: Colors.grey[200],
+              child: const Icon(Icons.image_not_supported, size: 50, color: Colors.grey),
             ),
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              );
+            },
+          )
+        : Image.asset(
+            'assets/placeholder.png',
+            fit: BoxFit.cover,
+          ),
+  ),
+),
             const SizedBox(height: 8),
             Text(
               title,

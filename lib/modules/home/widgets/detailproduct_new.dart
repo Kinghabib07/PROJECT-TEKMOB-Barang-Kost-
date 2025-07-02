@@ -180,8 +180,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>
   /// Halaman detail produk utama
   Widget _buildProductDetail(Map<String, dynamic> product) {
     final title = product['nama'] ?? 'Tanpa Nama';
-    final priceRaw = product['harga'] ?? 0;
-    final price = _formatPrice(priceRaw);
+    final price = product['harga']?.toString() ?? '0';
     final image = product['gambar'] ?? 'https://via.placeholder.com/300';
     final description = product['deskripsi'] ?? 'Tidak ada deskripsi tersedia untuk produk ini.';
 
@@ -803,27 +802,16 @@ class _ProductDetailPageState extends State<ProductDetailPage>
     );
   }
 
-  /// Format price with safe handling of different data types
-  String _formatPrice(dynamic price) {
-    if (price == null) return '0';
-    
-    double priceValue;
-    if (price is double) {
-      priceValue = price;
-    } else if (price is int) {
-      priceValue = price.toDouble();
-    } else if (price is String) {
-      priceValue = double.tryParse(price) ?? 0.0;
-    } else {
-      priceValue = 0.0;
+  /// Format price with thousands separator
+  String _formatPrice(String price) {
+    try {
+      final numPrice = double.parse(price);
+      return numPrice.toStringAsFixed(0).replaceAllMapped(
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+        (Match m) => '${m[1]}.',
+      );
+    } catch (e) {
+      return price;
     }
-    
-    // Format with thousands separator
-    final formatted = priceValue.toStringAsFixed(0).replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (Match m) => '${m[1]}.',
-    );
-    
-    return formatted;
   }
 }

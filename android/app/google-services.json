@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "558173414746",
+    "project_id": "tokoh-anak-kos",
+    "storage_bucket": "tokoh-anak-kos.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558173414746:android:23028b22c8d1d31141bf63",
+        "android_client_info": {
+          "package_name": "com.uad.barang_kost"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKX04yf7UQkT5KHacsYuRUWewl07GqOis"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

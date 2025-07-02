@@ -12,6 +12,17 @@ dependencies:
   http: ^1.0.0
   cupertino_icons: ^1.0.8
   font_awesome_flutter: ^10.7.0
+  provider: ^6.1.2  # For state management
+  shared_preferences: ^2.2.2  # For local storage
+  cached_network_image: ^3.3.1  # For better image caching
+  
+  # Firebase dependencies
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.15.3
+  cloud_firestore: ^4.13.6
+  
+  # Form validation
+  email_validator: ^2.1.17
 
 dev_dependencies:
   flutter_test:

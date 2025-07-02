@@ -40,29 +40,13 @@ class _HomePageState extends State<HomePage> {
   void _initializeProducts() {
     futureProducts = ProductService().fetchAllProducts();
     futureProducts.then((products) {
-      if (mounted) { // Check if widget is still mounted
-        setState(() {
-          allProducts = products;
-          filteredProducts = products; // Tampilkan semua produk di awal
-        });
-      }
+      setState(() {
+        allProducts = products;
+        filteredProducts = products; // Tampilkan semua produk di awal
+      });
     }).catchError((error) {
       // Log error untuk debugging
       debugPrint('Gagal memuat produk: $error');
-      if (mounted) {
-        // Show user-friendly error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Gagal memuat produk: ${error.toString()}'),
-            backgroundColor: Colors.red,
-            action: SnackBarAction(
-              label: 'Coba Lagi',
-              textColor: Colors.white,
-              onPressed: () => _initializeProducts(),
-            ),
-          ),
-        );
-      }
     });
   }
 
@@ -73,14 +57,8 @@ class _HomePageState extends State<HomePage> {
         filteredProducts = allProducts;
       } else {
         filteredProducts = allProducts.where((product) {
-          // Pastikan product['nama'] dikonversi ke string dengan aman
           final productName = (product['nama'] ?? '').toString().toLowerCase();
-          final productCategory = (product['kategori'] ?? '').toString().toLowerCase();
-          final searchQuery = query.toLowerCase();
-          
-          // Cari berdasarkan nama atau kategori
-          return productName.contains(searchQuery) || 
-                 productCategory.contains(searchQuery);
+          return productName.contains(query.toLowerCase());
         }).toList();
       }
     });

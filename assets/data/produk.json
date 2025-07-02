@@ -1,5 +1,6 @@
 [
   {
+    "id": 2,
     "nama": "Kaos Oversize Polos",
     "kategori": "Atasan",
     "harga": 45000,
@@ -8,6 +9,7 @@
     "gambar": "https://berducdn.com/img/800/bsoai4w7bsoau5pwec_2/CTVrrYM7SIEPHSeCTVzYopgRRTzU41Q6mluOrH3S97ow.jpg"
   },
   {
+    "id": 3,
     "nama": "Kemeja Flanel Pria",
     "kategori": "Atasan",
     "harga": 85000,
@@ -16,6 +18,7 @@
     "gambar": "https://down-id.img.susercontent.com/file/38b8f5ba0335c515259a83c9ddb93fec"
   },
   {
+    "id": 4,
     "nama": "Blouse Wanita Lengan Panjang",
     "kategori": "Atasan",
     "harga": 65000,
@@ -24,6 +27,7 @@
     "gambar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsqgZRhBuRvqMWNpUE4jt1VR39QC99c-M4mA&s"
   },
   {
+    "id": 5,
     "nama": "Celana Jeans Skinny",
     "kategori": "Bawahan",
     "harga": 120000,
@@ -32,6 +36,7 @@
     "gambar": "https://americantall.com/products/skinny-high-rise-tall-women-jean-monaco-faded"
   },
   {
+    "id": 6,
     "nama": "Celana Kulot Polos",
     "kategori": "Bawahan",
     "harga": 75000,
@@ -40,6 +45,7 @@
     "gambar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz6V0jveUodokYuYoM0P9pcbxI1Jg4i0f_PQ&s"
   },
   {
+    "id": 7,
     "nama": "Rok Plisket Midi",
     "kategori": "Bawahan",
     "harga": 68000,
@@ -48,6 +54,7 @@
     "gambar": "https://down-id.img.susercontent.com/file/863902005268902bd34015a0ef705d4b"
   },
   {
+    "id": 8,
     "nama": "Hoodie Zipper Unisex",
     "kategori": "Outerwear",
     "harga": 140000,
@@ -56,6 +63,7 @@
     "gambar": "https://images.tokopedia.net/img/cache/700/VqbcmM/2024/5/7/a257b322-2fe7-48a2-b9bf-4279c648cf3f.jpg"
   },
   {
+    "id": 9,
     "nama": "Jaket Bomber Pria",
     "kategori": "Outerwear",
     "harga": 165000,
@@ -64,6 +72,7 @@
     "gambar": "https://i.ibb.co/mv3MJ3T/jaket-bomber.jpg"
   },
   {
+    "id": 10,
     "nama": "Cardigan Rajut Wanita",
     "kategori": "Outerwear",
     "harga": 90000,
@@ -72,6 +81,7 @@
     "gambar": "https://i.ibb.co/WKRmPSf/cardigan.jpg"
   },
   {
+    "id": 11,
     "nama": "Dress Panjang Floral",
     "kategori": "Dress",
     "harga": 135000,
@@ -80,6 +90,7 @@
     "gambar": "https://i.ibb.co/0GfPQZx/dress-floral.jpg"
   },
   {
+    "id": 12,
     "nama": "Mini Dress Sabuk Hitam",
     "kategori": "Dress",
     "harga": 110000,
@@ -88,6 +99,7 @@
     "gambar": "https://i.ibb.co/sF6xfVD/mini-dress.jpg"
   },
   {
+    "id": 13,
     "nama": "Sepatu Sneakers Putih",
     "kategori": "Sepatu",
     "harga": 190000,
@@ -96,6 +108,7 @@
     "gambar": "https://i.ibb.co/1QcNwcp/sneakers.jpg"
   },
   {
+    "id": 14,
     "nama": "Sandal Slide Wanita",
     "kategori": "Sepatu",
     "harga": 58000,
@@ -104,6 +117,7 @@
     "gambar": "https://i.ibb.co/qnBYRDx/sandal.jpg"
   },
   {
+    "id": 15,
     "nama": "Topi Bucket Polos",
     "kategori": "Aksesoris",
     "harga": 30000,
@@ -112,6 +126,7 @@
     "gambar": "https://i.ibb.co/J3CWkSg/bucket-hat.jpg"
   },
   {
+    "id": 16,
     "nama": "Jam Tangan Fashion Wanita",
     "kategori": "Aksesoris",
     "harga": 99000,
@@ -120,6 +135,7 @@
     "gambar": "https://i.ibb.co/WVvywv7/jam-wanita.jpg"
   },
   {
+    "id": 17,
     "nama": "Ikat Pinggang Kulit",
     "kategori": "Aksesoris",
     "harga": 45000,
@@ -128,6 +144,7 @@
     "gambar": "https://i.ibb.co/4NqL7Ch/ikat-pinggang.jpg"
   },
   {
+    "id": 18,
     "nama": "Baju Muslim Pria Koko Bordir",
     "kategori": "Atasan",
     "harga": 99000,
@@ -136,6 +153,7 @@
     "gambar": "https://i.ibb.co/k4LPq0r/koko.jpg"
   },
   {
+    "id": 19,
     "nama": "Mukena Katun Rayon",
     "kategori": "Dress",
     "harga": 120000,
@@ -144,6 +162,7 @@
     "gambar": "https://i.ibb.co/KDpgnrb/mukena.jpg"
   },
   {
+    "id": 20,
     "nama": "Celana Training Olahraga",
     "kategori": "Bawahan",
     "harga": 68000,
@@ -152,6 +171,7 @@
     "gambar": "https://i.ibb.co/DpPYzWk/celana-training.jpg"
   },
   {
+    "id": 21,
     "nama": "Kaos Polo Lengan Pendek",
     "kategori": "Atasan",
     "harga": 72000,

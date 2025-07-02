@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:email_validator/email_validator.dart';
 import '../home/home_page.dart';
+import '../../services/auth_service.dart';
+import 'register_page.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,36 +24,102 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
 
   Future<void> _login() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
+    if (!_formKey.currentState!.validate()) return;
 
-    if (_formKey.currentState!.validate()) {
-      setState(() => _isLoading = true);
-      try {
-        final String data = await rootBundle.loadString('assets/users.json');
-        final List users = json.decode(data);
-        final user = users.firstWhere(
-          (u) => u['email'] == email && u['password'] == password,
-          orElse: () => null,
-        );
-        if (user != null) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const HomePage()),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Email atau password salah')),
-          );
-        }
-      } catch (e) {
+    setState(() => _isLoading = true);
+
+    try {
+      final authService = Provider.of<AuthService>(context, listen: false);
+      
+      await authService.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      // Navigation will be handled by AuthWrapper automatically
+    } catch (e) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Terjadi kesalahan saat login')),
+          SnackBar(
+            content: Text(e.toString()),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
         );
-      } finally {
+      }
+    } finally {
+      if (mounted) {
         setState(() => _isLoading = false);
       }
     }
+  }
+
+  /// Show forgot password dialog
+  void _showForgotPasswordDialog() {
+    final emailController = TextEditingController();
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Reset Password'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Masukkan email Anda untuk reset password:'),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                hintText: 'Email',
+                prefixIcon: const Icon(Icons.email_outlined),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Batal'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (emailController.text.trim().isNotEmpty) {
+                try {
+                  final authService = Provider.of<AuthService>(context, listen: false);
+                  await authService.resetPassword(emailController.text.trim());
+                  
+                  if (mounted) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Email reset password telah dikirim'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(e.toString())),
+                    );
+                  }
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF893939),
+            ),
+            child: const Text('Kirim'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -85,9 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Email wajib diisi';
                       }
-                      if (!RegExp(
-                        r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-                      ).hasMatch(value)) {
+                      // Simple email validation
+                      if (!EmailValidator.validate(value)) {
                         return 'Format email tidak valid';
                       }
                       return null;
@@ -139,19 +206,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
+                  // Forgot Password
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Fitur lupa password belum tersedia'),
-                          ),
-                        );
-                      },
+                      onPressed: () => _showForgotPasswordDialog(),
                       child: const Text(
                         'Lupa kata sandi Anda?',
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Color(0xFF893939)),
                       ),
                     ),
                   ),
@@ -195,6 +257,72 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(width: 20),
                       socialLoginButton(FontAwesomeIcons.facebookF),
                     ],
+                  ),
+                  const SizedBox(height: 24),
+                  
+                  // Register Link
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Belum punya akun? ',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const RegisterPage()),
+                          );
+                        },
+                        child: const Text(
+                          'Daftar di sini',
+                          style: TextStyle(
+                            color: Color(0xFF893939),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Guest Login Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const HomePage()),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Color(0xFF893939), width: 2),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.person_outline,
+                            color: Color(0xFF893939),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'Masuk sebagai Guest',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF893939),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 24),
                 ],
