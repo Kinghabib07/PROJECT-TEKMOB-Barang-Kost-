@@ -1,8 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../services/auth_service.dart';
+// import 'package:provider/provider.dart';  // DISABLED FOR NOW
+// import 'package:email_validator/email_validator.dart';  // DISABLED FOR NOW
+// import '../../services/auth_service.dart';  // DISABLED FOR NOW
 import 'login_page.dart';
 import '../home/home_page.dart';
 
@@ -48,33 +49,13 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => _isLoading = true);
 
     try {
-      final authService = Provider.of<AuthService>(context, listen: false);
+      // TEMPORARY: Skip Firebase registration for testing
+      await Future.delayed(const Duration(seconds: 2)); // Simulate network call
       
-      // Register with Firebase
-      await authService.registerWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-        name: _nameController.text.trim(),
-        phone: _phoneController.text.trim(),
-      );
-
-      // Send email verification
-      await authService.sendEmailVerification();
-
       if (mounted) {
         _showSuccessDialog();
       }
     } catch (e) {
-      if (mounted) {
-        // Handle specific Firebase errors
-        String errorMessage = _handleRegistrationError(e.toString());
-        _showSnackBar(errorMessage);
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
       if (mounted) {
         _showSnackBar(e.toString());
       }
@@ -100,8 +81,8 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ),
         content: const Text(
-          'Akun berhasil dibuat! Email verifikasi telah dikirim. '
-          'Silakan periksa email Anda dan verifikasi untuk mengaktifkan akun.',
+          'Akun berhasil dibuat! (simulasi)\n'
+          'Fitur verifikasi email akan tersedia setelah Firebase aktif.',
         ),
         actions: [
           TextButton(
@@ -129,106 +110,6 @@ class _RegisterPageState extends State<RegisterPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
-  }
-
-  /// Handle registration errors and provide user-friendly messages
-  String _handleRegistrationError(String error) {
-    if (error.contains('email-already-in-use')) {
-      return 'Email sudah terdaftar. Silakan gunakan email lain atau login.';
-    } else if (error.contains('weak-password')) {
-      return 'Password terlalu lemah. Gunakan minimal 6 karakter.';
-    } else if (error.contains('invalid-email')) {
-      return 'Format email tidak valid.';
-    } else if (error.contains('network-request-failed')) {
-      return 'Tidak ada koneksi internet. Periksa koneksi Anda.';
-    } else if (error.contains('firebase')) {
-      return 'Gagal terhubung ke server. Coba lagi nanti.';
-    } else {
-      return 'Terjadi kesalahan: $error';
-    }
-  }
-
-  /// Show fallback option when Firebase registration fails
-  void _showFallbackOption() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Row(
-          children: [
-            Icon(Icons.info_outline, color: Colors.orange),
-            SizedBox(width: 8),
-            Text('Mode Demo'),
-          ],
-        ),
-        content: const Text(
-          'Firebase sedang tidak tersedia. Anda dapat melanjutkan dalam mode demo '
-          'atau mencoba lagi nanti ketika server tersedia.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Coba Lagi'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _proceedWithDemo();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF893939),
-            ),
-            child: const Text('Mode Demo'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Proceed with demo mode (mock registration)
-  void _proceedWithDemo() async {
-    setState(() => _isLoading = true);
-    
-    // Simulate registration process
-    await Future.delayed(const Duration(seconds: 2));
-    
-    if (mounted) {
-      setState(() => _isLoading = false);
-      
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Row(
-            children: [
-              Icon(Icons.check_circle, color: Colors.green, size: 28),
-              SizedBox(width: 8),
-              Text('Registrasi Berhasil!'),
-            ],
-          ),
-          content: Text(
-            'Akun demo berhasil dibuat!\n\n'
-            'Mode: Demo/Offline\n'
-            'Email: ${_emailController.text.trim()}\n\n'
-            'Catatan: Data tidak disimpan secara permanen. '
-            'Untuk menyimpan data permanen, setup Firebase terlebih dahulu.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomePage()),
-                );
-              },
-              child: const Text('Lanjutkan'),
-            ),
-          ],
-        ),
-      );
-    }
   }
 
   @override

@@ -10,7 +10,7 @@ plugins {
 android {
     namespace = "com.uad.barang_kost"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"  // Updated to match Firebase requirements
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

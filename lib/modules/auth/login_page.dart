@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:email_validator/email_validator.dart';
+// import 'package:provider/provider.dart';  // DISABLED FOR NOW
+// import 'package:email_validator/email_validator.dart';  // DISABLED FOR NOW
 import '../home/home_page.dart';
-import '../../services/auth_service.dart';
+// import '../../services/auth_service.dart';  // DISABLED FOR NOW
 import 'register_page.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -29,14 +29,15 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final authService = Provider.of<AuthService>(context, listen: false);
+      // TEMPORARY: Skip Firebase authentication for testing
+      await Future.delayed(const Duration(seconds: 1)); // Simulate network call
       
-      await authService.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      );
-
-      // Navigation will be handled by AuthWrapper automatically
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -90,25 +91,17 @@ class _LoginScreenState extends State<LoginScreen> {
           ElevatedButton(
             onPressed: () async {
               if (emailController.text.trim().isNotEmpty) {
-                try {
-                  final authService = Provider.of<AuthService>(context, listen: false);
-                  await authService.resetPassword(emailController.text.trim());
-                  
-                  if (mounted) {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Email reset password telah dikirim'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(e.toString())),
-                    );
-                  }
+                // TEMPORARY: Skip Firebase reset password for testing
+                await Future.delayed(const Duration(seconds: 1)); // Simulate network call
+                
+                if (mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Fitur reset password akan tersedia setelah Firebase aktif'),
+                      backgroundColor: Colors.orange,
+                    ),
+                  );
                 }
               }
             },
@@ -154,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         return 'Email wajib diisi';
                       }
                       // Simple email validation
-                      if (!EmailValidator.validate(value)) {
+                      if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value)) {
                         return 'Format email tidak valid';
                       }
                       return null;
@@ -270,9 +263,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const RegisterPage()),
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (_) => const RegisterPage()),
+                          // );
+                          
+                          // TEMPORARY: Show message that register will be available later
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Fitur register akan tersedia setelah Firebase aktif'),
+                              backgroundColor: Colors.orange,
+                            ),
                           );
                         },
                         child: const Text(
